@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Samsungweb PayPal Sandbox Container</title>
+  <style>
+    body { font: 16px -apple-system, sans-serif; margin: 18px; color: #172033; }
+    h1 { margin-bottom: 8px; }
+    .badge { display: inline-block; padding: 5px 9px; border-radius: 999px; background: #fef3c7; color: #92400e; font-weight: 700; }
+    iframe { box-sizing: border-box; width: 100%; height: 410px; margin-top: 14px; border: 3px solid #0070ba; border-radius: 14px; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 10px; border-radius: 10px; background: #f1f5f9; }
+  </style>
+</head>
+<body>
+  <span class="badge">SANDBOX · NO REAL MONEY</span>
+  <h1>Samsungweb Merchant</h1>
+  <p>The iframe below hosts the PayPal Sandbox SDK wrapper.</p>
+  <iframe
+    title="PayPal Sandbox checkout wrapper"
+    src="https://paypalweb.localhost:8443/paypal-sandbox-checkout.html"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+    allow="payment">
+  </iframe>
+  <h2>Validated postMessage status</h2>
+  <pre id="merchant-status">Waiting for the PayPal Sandbox iframe…</pre>
+  <span id="native-summary" data-native-summary hidden>Waiting for PayPal Sandbox</span>
+  <script>
+    const statusElement = document.querySelector('#merchant-status');
+    const nativeSummaryElement = document.querySelector('#native-summary');
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://paypalweb.localhost:8443') return;
+      if (!event.data || event.data.source !== 'paypal-sandbox-demo') return;
+      statusElement.textContent = JSON.stringify(event.data, null, 2);
+      const { eventName, data = {} } = event.data;
+      nativeSummaryElement.textContent = [
+        eventName,
+        data.environment,
+        data.currency && data.amount ? `${data.currency} ${data.amount}` : null
+      ].filter(Boolean).join(' · ');
+    });
+  </script>
+</body>
+</html>

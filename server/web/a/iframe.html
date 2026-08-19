@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Samsungweb iframe Container</title>
+  <style>
+    body { font: 16px -apple-system, sans-serif; margin: 18px; color: #182230; }
+    input { box-sizing: border-box; width: 100%; padding: 10px; border: 1px solid #8ea0b5; border-radius: 9px; }
+    iframe { box-sizing: border-box; width: 100%; height: 270px; margin-top: 16px; border: 3px solid #7c3aed; border-radius: 12px; }
+    code { color: #7c3aed; }
+  </style>
+</head>
+<body>
+  <h1>Samsungweb Container</h1>
+  <p>Current origin: <code>https://samsungweb.localhost:8443</code></p>
+  <input id="parent-value" name="parentValue" value="Value from the Samsungweb main page">
+  <iframe
+    title="Paypalweb test frame"
+    src="https://paypalweb.localhost:8443/embedded.html"
+    allow="clipboard-read; clipboard-write">
+  </iframe>
+</body>
+</html>

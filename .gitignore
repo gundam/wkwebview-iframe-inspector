@@ -1,0 +1,11 @@
+.DS_Store
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+server/.certs/
+__pycache__/
+*.py[cod]
+
+# Locally recorded demos are outdated and should not be published as source.
+*.mp4

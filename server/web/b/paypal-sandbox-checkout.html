@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Paypalweb Sandbox Checkout Wrapper</title>
+  <style>
+    body { font: 15px -apple-system, sans-serif; margin: 16px; background: #f5f9ff; color: #142c8e; }
+    .card { padding: 14px; border-radius: 12px; background: white; box-shadow: 0 3px 14px rgba(0, 48, 135, .12); }
+    .badge { color: #92400e; font-weight: 700; }
+    #paypal-button-container { min-height: 46px; margin-top: 14px; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 10px; border-radius: 8px; background: #eef2ff; color: #1e293b; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">PAYPAL SANDBOX</div>
+    <h2>Test checkout · USD 1.00</h2>
+    <div id="paypal-button-container"></div>
+    <pre id="checkout-status">Loading the official PayPal Sandbox SDK…</pre>
+    <span id="native-summary" data-native-summary hidden>Loading PayPal Sandbox SDK</span>
+  </div>
+
+  <script>
+    const statusElement = document.querySelector('#checkout-status');
+    const nativeSummaryElement = document.querySelector('#native-summary');
+
+    function publish(eventName, data = {}) {
+      const message = { source: 'paypal-sandbox-demo', eventName, data };
+      statusElement.textContent = JSON.stringify(message, null, 2);
+      nativeSummaryElement.textContent = [
+        eventName,
+        data.environment,
+        data.currency && data.amount ? `${data.currency} ${data.amount}` : null
+      ].filter(Boolean).join(' · ');
+      window.parent.postMessage(message, 'https://samsungweb.localhost:8443');
+    }
+
+    function onPayPalSDKLoaded() {
+      publish('sdk-loaded', { environment: 'sandbox', amount: '1.00', currency: 'USD' });
+
+      paypal.Buttons({
+        style: { layout: 'vertical', shape: 'rect', label: 'paypal' },
+        createOrder(data, actions) {
+          publish('order-creating', { environment: 'sandbox' });
+          return actions.order.create({
+            purchase_units: [{ amount: { currency_code: 'USD', value: '1.00' } }]
+          });
+        },
+        onApprove(data, actions) {
+          publish('order-approved', { orderID: data.orderID });
+          return actions.order.capture().then((details) => {
+            publish('order-captured', {
+              orderID: data.orderID,
+              status: details.status || 'COMPLETED'
+            });
+          });
+        },
+        onCancel(data) {
+          publish('order-cancelled', { orderID: data.orderID || null });
+        },
+        onError(error) {
+          publish('checkout-error', { message: String(error) });
+        }
+      }).render('#paypal-button-container').then(() => {
+        publish('buttons-rendered', { environment: 'sandbox', amount: '1.00', currency: 'USD' });
+      }).catch((error) => {
+        publish('render-error', { message: String(error) });
+      });
+    }
+  </script>
+  <script
+    async
+    src="https://www.paypal.com/sdk/js?client-id=test&amp;currency=USD&amp;intent=capture&amp;components=buttons&amp;buyer-country=US"
+    onload="onPayPalSDKLoaded()"
+    onerror="publish('sdk-load-error', { message: 'Unable to load the PayPal Sandbox SDK.' })">
+  </script>
+</body>
+</html>

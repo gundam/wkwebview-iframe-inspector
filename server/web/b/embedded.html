@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Paypalweb Embedded Page</title>
+  <style>
+    body { font: 15px -apple-system, sans-serif; margin: 18px; background: #f5f3ff; color: #2e1065; }
+    input, select, textarea { box-sizing: border-box; width: 100%; margin: 5px 0 10px; padding: 8px; border: 1px solid #a78bfa; border-radius: 8px; }
+  </style>
+</head>
+<body data-page-owner="domain-b">
+  <h2>Paypalweb Cross-Origin iframe</h2>
+  <p>This page comes from <strong>https://paypalweb.localhost:8443</strong>.</p>
+  <input id="iframe-name" name="iframeName" value="Dynamic value inside the Paypalweb iframe">
+  <select id="iframe-role" name="iframeRole">
+    <option value="reader">Viewer</option>
+    <option value="editor" selected>Editor</option>
+  </select>
+  <textarea id="iframe-note" name="iframeNote">Notes stored inside the iframe</textarea>
+</body>
+</html>
