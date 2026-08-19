@@ -52,6 +52,16 @@
       outline: none;
     }
     input:focus { border-color: #0070ba; box-shadow: 0 0 0 4px rgba(0, 112, 186, .12); }
+    .option-note {
+      margin: 28px 0 0;
+      padding: 15px 18px;
+      border-radius: 14px;
+      color: #003087;
+      background: #eaf4ff;
+      font-size: 20px;
+      font-weight: 800;
+      text-align: center;
+    }
     [data-native-summary] { display: none; }
   </style>
 </head>
@@ -68,6 +78,8 @@
   <label for="direct-value">Demo page value</label>
   <input id="direct-value" name="directValue" value="Direct value from the PayPal page" autocomplete="off">
 
-  <span data-native-summary>PayPal page · Rendered directly · No iframe</span>
+  <p class="option-note">This is option 3</p>
+
+  <span data-native-summary>PayPal page · Rendered directly · No iframe · This is option 3</span>
 </body>
 </html>
