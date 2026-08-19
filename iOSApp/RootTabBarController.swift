@@ -1,9 +1,11 @@
 import UIKit
+import SafariServices
 
 private enum DemoTab: String, CaseIterable {
     case direct
     case balance
     case sendMoney
+    case safari
     case nested
     case sandbox
 
@@ -12,6 +14,7 @@ private enum DemoTab: String, CaseIterable {
         case .direct: "Direct"
         case .balance: "Balance"
         case .sendMoney: "Send Money"
+        case .safari: "Safari"
         case .nested: "Nested"
         case .sandbox: "Sandbox"
         }
@@ -46,6 +49,20 @@ final class RootTabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "paperplane.fill")
         )
 
+        let safariConfiguration = SFSafariViewController.Configuration()
+        safariConfiguration.entersReaderIfAvailable = false
+        safariConfiguration.barCollapsingEnabled = false
+        let safariBalance = SFSafariViewController(
+            url: WebDemoConfiguration.safariBalancePageURL,
+            configuration: safariConfiguration
+        )
+        safariBalance.preferredControlTintColor = .systemBlue
+        safariBalance.tabBarItem = UITabBarItem(
+            title: "Safari",
+            image: UIImage(systemName: "safari.fill"),
+            selectedImage: UIImage(systemName: "safari.fill")
+        )
+
         let multiLevel = MultiLevelIframeViewController()
         multiLevel.tabBarItem = UITabBarItem(
             title: "Nested",
@@ -64,6 +81,7 @@ final class RootTabBarController: UITabBarController {
             .direct: UINavigationController(rootViewController: direct),
             .balance: UINavigationController(rootViewController: balance),
             .sendMoney: UINavigationController(rootViewController: sendMoney),
+            .safari: safariBalance,
             .nested: UINavigationController(rootViewController: multiLevel),
             .sandbox: UINavigationController(rootViewController: paypalSandbox)
         ]
@@ -108,6 +126,9 @@ final class RootTabBarController: UITabBarController {
     }
 
     private var launchDemoTab: DemoTab {
+        if ProcessInfo.processInfo.arguments.contains("--safari") {
+            return .safari
+        }
         if ProcessInfo.processInfo.arguments.contains("--paypal-sandbox") {
             return .sandbox
         }

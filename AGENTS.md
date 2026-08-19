@@ -15,7 +15,7 @@ This repository is an iOS Simulator-only `WKWebView` inspection demo. Use this f
 - `iOSApp.xcodeproj`: Xcode project; scheme is `iOSApp`.
 - `iOSApp/iOSAppApp.swift`: SwiftUI app entry point.
 - `iOSApp/ContentView.swift`: hosts the UIKit tab controller.
-- `iOSApp/RootTabBarController.swift`: creates the five demo tabs and handles launch arguments.
+- `iOSApp/RootTabBarController.swift`: creates the six demo tabs, including the `SFSafariViewController` balance tab, and handles launch arguments.
 - `iOSApp/WebViewControllers.swift`: `WKWebView`, injected collector, live frame snapshots, compact DEBUG UI, and `More` details.
 - `iOSApp/WebDemoConfiguration.swift`: all demo URLs and local-host allowlist.
 - `server/start.sh`: prepares the local certificate, installs it into every booted simulator, and starts the HTTPS server.
@@ -96,6 +96,7 @@ Pass these after the bundle identifier in `simctl launch`:
 - No arguments: open the directly rendered `Paypalweb` balance page tab.
 - `--balance` or legacy `--iframe`: open the balance iframe tab.
 - `--send-money`: open the send-money iframe tab.
+- `--safari`: open the PayPal balance page in `SFSafariViewController`.
 - `--multilevel`: open the Samsungweb → Paypalweb → Checkoutweb nested iframe tab.
 - `--paypal-sandbox`: open the PayPal SDK Sandbox tab.
 - `--debug`: automatically open the native DEBUG panel; combine it with any mode.
@@ -146,7 +147,7 @@ Checkoutweb deep frame:  /deep.html
 4. Input/change listeners, a `MutationObserver`, and a 700 ms timer publish snapshots.
 5. `WKScriptMessage.frameInfo` lets native code associate the snapshot with its frame.
 6. The DEBUG panel defaults to a compact highlighted summary. `More` displays URL, origin, frame ID, body text, and full HTML.
-7. The DEBUG `Tabs` menu controls which demo pages appear in the native tab bar; it always keeps at least one page visible and includes `Show All`.
+7. The DEBUG `Tabs` menu controls which demo pages appear in the native tab bar; it always keeps at least one page visible and includes `Show All`. The Safari tab itself intentionally has no injected DEBUG collector.
 8. Opening DEBUG docks the WebView above the panel instead of covering it and scrolls the first editable field or iframe into view, so web inputs remain reachable during live inspection.
 
 PayPal Sandbox pages use explicit `[data-native-summary]` text and strict-origin `postMessage`, so the compact UI shows results such as:
@@ -176,7 +177,8 @@ Expected automated test result: two tests, zero failures.
 
 Expected visual checks:
 
-- All five tabs are visible.
+- All six demos are available; UIKit may place overflow items under its standard `More` tab on compact-width devices.
+- The Safari demo opens the Paypalweb balance page in `SFSafariViewController` and shows no injected DEBUG panel.
 - Balance and Send Money are separate native tabs, and each renders exactly one cross-origin iframe.
 - DEBUG count is `2` in both Balance and Send Money.
 - The Send Money iframe contains exactly one amount input and updates the compact DEBUG result while typing.

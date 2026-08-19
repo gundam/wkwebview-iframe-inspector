@@ -26,12 +26,21 @@
 <body data-page-owner="paypalweb-balance">
   <p class="eyebrow">PAYPAL · BALANCE PAGE</p>
   <h2>This is a PayPal balance page</h2>
-  <p class="account">Loaded inside the Samsung webpage as an iframe</p>
+  <p class="account" id="render-context">Loaded inside the Samsung webpage as an iframe</p>
   <h2>Available balance</h2>
   <p class="account">Personal account ···· 4821</p>
   <p class="amount" id="current-balance">$12,480.50</p>
   <p class="available">Available now: <strong id="available-balance">$12,350.50</strong></p>
 
   <span id="native-summary" data-native-summary>PayPal balance iframe · Balance $12,480.50 · Available $12,350.50</span>
+
+  <script>
+    if (window.self === window.top) {
+      document.title = 'PayPal Balance in Safari';
+      document.getElementById('render-context').textContent = 'Opened directly in SFSafariViewController';
+      document.getElementById('native-summary').textContent =
+        'PayPal balance page · Safari browser view · Balance $12,480.50 · Available $12,350.50';
+    }
+  </script>
 </body>
 </html>

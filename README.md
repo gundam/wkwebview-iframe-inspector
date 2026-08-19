@@ -21,19 +21,20 @@ Test origins:
 - Paypalweb: `https://paypalweb.localhost:8443`
 - Checkoutweb: `https://checkoutweb.localhost:8443`
 
-The tabs demonstrate five cases:
+The tabs demonstrate six cases:
 
 1. `Direct` renders a Paypalweb balance page directly as the main frame, with no iframe.
 2. `Balance` loads a Samsungweb outer page with one Paypalweb balance iframe. Both page owners are labeled in the UI.
 3. `Send Money` loads a separate Samsungweb outer page with one Paypalweb Checkout iframe. The checkout demo contains one amount input and updates the native DEBUG result while typing; no real money is moved.
-4. `Nested` loads this three-origin chain:
+4. `Safari` uses Apple's `SFSafariViewController` to open the Paypalweb balance page. It does not use the app-controlled WKWebView inspector or inject the native DEBUG collector.
+5. `Nested` loads this three-origin chain:
 
    ```text
    Samsungweb (depth 0)
    └── Paypalweb (depth 1)
        └── Checkoutweb (depth 2)
    ```
-5. `Sandbox` loads a `paypalweb.localhost` iframe wrapper that uses the official PayPal JavaScript SDK with `client-id=test`. The debug panel reads only the two local test frames and the documented checkout status; it intentionally does not inject into PayPal-owned frames or read account credentials.
+6. `Sandbox` loads a `paypalweb.localhost` iframe wrapper that uses the official PayPal JavaScript SDK with `client-id=test`. The debug panel reads only the two local test frames and the documented checkout status; it intentionally does not inject into PayPal-owned frames or read account credentials.
 
 ## Production security references
 
@@ -47,7 +48,7 @@ For production PayPal authentication or payment, use PayPal’s supported iOS in
 
 Native code captures every frame's depth, URL, origin, title, body text, full HTML, and live form values. The injected collection script runs in every frame, so it does not try to bypass the browser's same-origin policy from the parent page.
 
-Every screen includes a floating `DEBUG` button. When the panel opens, the WebView resizes above it instead of being covered and automatically reveals the first editable field or iframe, so page inputs remain reachable during a live inspection. The panel defaults to a concise content-and-fields summary; tap `More` for frame metadata and full HTML, or `Less` to return to the summary. Use the `Tabs` menu to independently show or hide Direct, Balance, Send Money, Nested, and Sandbox for different demo combinations. At least one page always remains visible. Results continue updating when form values, DOM content, or iframe content changes.
+Every WKWebView demo screen includes a floating `DEBUG` button. When the panel opens, the WebView resizes above it instead of being covered and automatically reveals the first editable field or iframe, so page inputs remain reachable during a live inspection. The panel defaults to a concise content-and-fields summary; tap `More` for frame metadata and full HTML, or `Less` to return to the summary. The Safari tab intentionally has no native DEBUG collector. Use the `Tabs` menu to independently show or hide Direct, Balance, Send Money, Safari, Nested, and Sandbox for different demo combinations. At least one page always remains visible. Results continue updating when form values, DOM content, or iframe content changes.
 
 > The local server uses an automatically generated self-signed certificate. The app only allows `.localhost` development hosts. This setup is for simulator testing only and must not be used in production.
 
