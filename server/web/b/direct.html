@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Direct PayPal Balance</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 20px;
+      font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #142c8e;
+      background: linear-gradient(160deg, #f7fbff 0%, #ffffff 52%, #eef6ff 100%);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: #003087;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #009cde; }
+    h1 { margin: 22px 0 8px; font-size: 32px; letter-spacing: -.03em; }
+    .lead { margin: 0; color: #334e68; font-size: 18px; line-height: 1.45; }
+    .explanation {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid #b8d8f8;
+      border-radius: 16px;
+      color: #173b67;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 12px 30px rgba(0, 48, 135, .08);
+    }
+    .explanation strong { display: block; margin-bottom: 5px; color: #003087; }
+    .balance-card {
+      padding: 20px;
+      border: 2px solid #8ec8f0;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(0, 48, 135, .08);
+    }
+    .balance-card h2 { margin: 0; color: #142c8e; font-size: 21px; }
+    .account { margin: 5px 0 18px; color: #64748b; font-size: 14px; }
+    .amount { margin: 0; color: #0f172a; font-size: 42px; font-weight: 800; letter-spacing: -.04em; }
+    .available { margin: 6px 0 0; color: #475569; font-size: 17px; }
+    .available strong { color: #047857; }
+    .option-note {
+      margin: 28px 0 0;
+      padding: 15px 18px;
+      border-radius: 14px;
+      color: #003087;
+      background: #eaf4ff;
+      font-size: 20px;
+      font-weight: 800;
+      text-align: center;
+    }
+    [data-native-summary] { display: none; }
+  </style>
+</head>
+<body data-page-owner="paypalweb-direct">
+  <span class="brand"><span class="dot"></span>PAYPAL · DIRECT BALANCE</span>
+  <h1>This is a PayPal balance page</h1>
+  <p class="lead">This PayPal balance page is rendered directly in the iOS WebView.</p>
+
+  <div class="explanation">
+    <strong>No iframe is used</strong>
+    Native inspection reads this PayPal page as the main frame.
+  </div>
+
+  <section class="balance-card" aria-label="PayPal balance">
+    <h2>Available balance</h2>
+    <p class="account">Personal account ···· 4821</p>
+    <p class="amount" id="current-balance">$12,480.50</p>
+    <p class="available">Available now: <strong id="available-balance">$12,350.50</strong></p>
+  </section>
+
+  <p class="option-note">This is option 3</p>
+
+  <span data-native-summary>PayPal balance page · Rendered directly · Balance $12,480.50 · Available $12,350.50 · No iframe · This is option 3</span>
+</body>
+</html>

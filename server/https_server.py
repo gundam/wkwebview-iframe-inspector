@@ -58,9 +58,9 @@ class DomainRequestHandler(http.server.SimpleHTTPRequestHandler):
         clean_path = path.split("?", 1)[0].split("#", 1)[0].lstrip("/")
         if not clean_path:
             default_pages = {
-                "samsungweb.localhost": "direct.html",
-                "paypalweb.localhost": "balance.html",
-                "checkoutweb.localhost": "send-money.html",
+                "samsungweb.localhost": "iframe.html",
+                "paypalweb.localhost": "direct.html",
+                "checkoutweb.localhost": "deep.html",
             }
             clean_path = default_pages.get(host, "direct.html")
 
@@ -92,12 +92,13 @@ def main() -> None:
     context.load_cert_chain(certfile=CERT_FILE, keyfile=KEY_FILE)
     server.socket = context.wrap_socket(server.socket, server_side=True)
 
-    print(f"Samsungweb: https://samsungweb.localhost:{PORT}/direct.html", flush=True)
+    print(f"Paypalweb direct: https://paypalweb.localhost:{PORT}/direct.html", flush=True)
     print(f"Samsungweb iframe page: https://samsungweb.localhost:{PORT}/iframe.html", flush=True)
+    print(f"Samsungweb send-money iframe page: https://samsungweb.localhost:{PORT}/send-money-iframe.html", flush=True)
     print(f"Samsungweb multi-level page: https://samsungweb.localhost:{PORT}/multilevel.html", flush=True)
     print(f"PayPal Sandbox page: https://samsungweb.localhost:{PORT}/paypal-sandbox-container.html", flush=True)
     print(f"Paypalweb balance: https://paypalweb.localhost:{PORT}/balance.html", flush=True)
-    print(f"Checkoutweb send money: https://checkoutweb.localhost:{PORT}/send-money.html", flush=True)
+    print(f"Paypalweb Checkout amount: https://paypalweb.localhost:{PORT}/send-money.html", flush=True)
     print("Press Control-C to stop the server.", flush=True)
     try:
         server.serve_forever()

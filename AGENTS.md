@@ -15,14 +15,14 @@ This repository is an iOS Simulator-only `WKWebView` inspection demo. Use this f
 - `iOSApp.xcodeproj`: Xcode project; scheme is `iOSApp`.
 - `iOSApp/iOSAppApp.swift`: SwiftUI app entry point.
 - `iOSApp/ContentView.swift`: hosts the UIKit tab controller.
-- `iOSApp/RootTabBarController.swift`: creates the four demo tabs and handles launch arguments.
-- `iOSApp/WebViewControllers.swift`: `WKWebView`, injected collector, live frame snapshots, compact DEBUG UI, and `More` details.
+- `iOSApp/RootTabBarController.swift`: creates the five demo tabs and handles launch arguments.
+- `iOSApp/WebViewControllers.swift`: `WKWebView`, injected collector, live frame snapshots, compact DEBUG UI, `More` details, and the Direct tab's native `Safari` button for presenting the balance page in `SFSafariViewController`.
 - `iOSApp/WebDemoConfiguration.swift`: all demo URLs and local-host allowlist.
 - `server/start.sh`: prepares the local certificate, installs it into every booted simulator, and starts the HTTPS server.
 - `server/https_server.py`: certificate generation and host-based routing.
-- `server/web/a`: Samsungweb pages.
-- `server/web/b`: Paypalweb pages and PayPal Sandbox wrapper.
-- `server/web/c`: Checkoutweb deepest iframe page.
+- `server/web/a`: Samsungweb outer/container pages.
+- `server/web/b`: Paypalweb direct, balance, Checkout, nested, and PayPal Sandbox pages.
+- `server/web/c`: Checkoutweb deepest nested-iframe page.
 - `iOSAppTests/iOSAppTests.swift`: URL/origin/allowlist tests.
 
 ## Requirements
@@ -93,8 +93,9 @@ cd "$(git rev-parse --show-toplevel)"
 
 Pass these after the bundle identifier in `simctl launch`:
 
-- No arguments: open the `Samsungweb` direct-page tab.
-- `--iframe`: open the balance + send-money cross-origin iframe tab.
+- No arguments: open the directly rendered `Paypalweb` balance page tab.
+- `--balance` or legacy `--iframe`: open the balance iframe tab.
+- `--send-money`: open the send-money iframe tab.
 - `--multilevel`: open the Samsungweb → Paypalweb → Checkoutweb nested iframe tab.
 - `--paypal-sandbox`: open the PayPal SDK Sandbox tab.
 - `--debug`: automatically open the native DEBUG panel; combine it with any mode.
@@ -125,10 +126,11 @@ https://checkoutweb.localhost:8443  -> server/web/c
 Important pages:
 
 ```text
-Samsungweb direct:       /direct.html
-Money iframe root:       /iframe.html
+Paypalweb direct balance: /direct.html
+Balance iframe root:     /iframe.html
+Send Money iframe root:  /send-money-iframe.html
 Paypalweb balance:       /balance.html
-Checkoutweb send money:  /send-money.html
+Paypalweb send money:    /send-money.html
 Nested iframe root:      /multilevel.html
 PayPal Sandbox root:     /paypal-sandbox-container.html
 Paypalweb nested page:   /nested.html
@@ -144,6 +146,8 @@ Checkoutweb deep frame:  /deep.html
 4. Input/change listeners, a `MutationObserver`, and a 700 ms timer publish snapshots.
 5. `WKScriptMessage.frameInfo` lets native code associate the snapshot with its frame.
 6. The DEBUG panel defaults to a compact highlighted summary. `More` displays URL, origin, frame ID, body text, and full HTML.
+7. The DEBUG `Tabs` menu controls which demo pages appear in the native tab bar; it always keeps at least one page visible and includes `Show All`. The Safari view presented from Direct intentionally has no injected DEBUG collector.
+8. Opening DEBUG docks the WebView above the panel instead of covering it and scrolls the first editable field or iframe into view, so web inputs remain reachable during live inspection.
 
 PayPal Sandbox pages use explicit `[data-native-summary]` text and strict-origin `postMessage`, so the compact UI shows results such as:
 
@@ -172,14 +176,18 @@ Expected automated test result: two tests, zero failures.
 
 Expected visual checks:
 
-- All four tabs are visible.
-- The Money iframes tab renders one balance frame and one send-money frame; submitting the form updates both frames.
-- DEBUG count is `3` for the Money iframes demo.
+- All five tabs are visible.
+- The Direct tab's `Safari` button presents the Paypalweb balance page in `SFSafariViewController`; dismissing it returns to Direct, and the Safari view shows no injected DEBUG panel.
+- Balance and Send Money are separate native tabs, and each renders exactly one cross-origin iframe.
+- DEBUG count is `2` in both Balance and Send Money.
+- The Send Money iframe contains exactly one amount input and updates the compact DEBUG result while typing.
 - The nested tab renders Samsungweb, Paypalweb, and Checkoutweb.
 - DEBUG count is `3` for the nested demo.
 - PayPal Sandbox renders official PayPal test buttons.
 - DEBUG count is `2` for PayPal Sandbox and compact content fits without scrolling.
 - Tapping `More` shows full details; `Less` returns to the compact view.
+- The DEBUG `Tabs` menu can hide and restore each demo page independently; hiding the active page selects the first remaining page.
+- With DEBUG open, the Send Money amount input remains reachable by scrolling and live changes still appear in the native result.
 
 ## Common failures
 

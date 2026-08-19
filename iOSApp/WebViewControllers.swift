@@ -1,11 +1,51 @@
+import SafariServices
 import UIKit
 @preconcurrency import WebKit
 
 final class DirectWebViewController: WebInspectorViewController {
     init() {
         super.init(
-            pageTitle: "Inspect Samsungweb",
+            pageTitle: "Direct PayPal",
             url: WebDemoConfiguration.directPageURL
+        )
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "Safari",
+            style: .plain,
+            target: self,
+            action: #selector(openBalanceInSafari)
+        )
+        navigationItem.leftBarButtonItem?.accessibilityLabel = "Open PayPal balance in Safari"
+    }
+
+    @objc private func openBalanceInSafari() {
+        let configuration = SFSafariViewController.Configuration()
+        configuration.entersReaderIfAvailable = false
+        configuration.barCollapsingEnabled = false
+
+        let safariViewController = SFSafariViewController(
+            url: WebDemoConfiguration.safariBalancePageURL,
+            configuration: configuration
+        )
+        safariViewController.dismissButtonStyle = .done
+        safariViewController.preferredControlTintColor = .systemBlue
+        present(safariViewController, animated: true)
+    }
+}
+
+final class BalanceIframeViewController: WebInspectorViewController {
+    init() {
+        super.init(
+            pageTitle: "Balance iframe",
+            url: WebDemoConfiguration.balanceContainerURL
         )
     }
 
@@ -15,11 +55,11 @@ final class DirectWebViewController: WebInspectorViewController {
     }
 }
 
-final class IframeWebViewController: WebInspectorViewController {
+final class SendMoneyIframeViewController: WebInspectorViewController {
     init() {
         super.init(
-            pageTitle: "Balance + Send Money",
-            url: WebDemoConfiguration.iframeContainerURL
+            pageTitle: "Send Money iframe",
+            url: WebDemoConfiguration.sendMoneyContainerURL
         )
     }
 
@@ -65,6 +105,8 @@ class WebInspectorViewController: UIViewController {
     private var isShowingFullDetails = false
     private var debugButtonToSafeAreaConstraint: NSLayoutConstraint!
     private var debugButtonToPanelConstraint: NSLayoutConstraint!
+    private var webViewToSafeAreaConstraint: NSLayoutConstraint!
+    private var webViewToDebugButtonConstraint: NSLayoutConstraint!
 
     private lazy var webView: WKWebView = {
         let contentController = WKUserContentController()
@@ -152,6 +194,18 @@ class WebInspectorViewController: UIViewController {
         return button
     }()
 
+    private let tabVisibilityButton: UIButton = {
+        var configuration = UIButton.Configuration.tinted()
+        configuration.title = "Tabs"
+        configuration.image = UIImage(systemName: "rectangle.stack")
+        configuration.imagePadding = 5
+        configuration.buttonSize = .small
+        let button = UIButton(configuration: configuration)
+        button.accessibilityLabel = "Choose visible demo tabs"
+        button.showsMenuAsPrimaryAction = true
+        return button
+    }()
+
     init(pageTitle: String, url: URL) {
         pageURL = url
         super.init(nibName: nil, bundle: nil)
@@ -182,6 +236,11 @@ class WebInspectorViewController: UIViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshTabVisibilityMenu()
+    }
+
     deinit {
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "frameSnapshot")
     }
@@ -196,12 +255,17 @@ class WebInspectorViewController: UIViewController {
         liveLabel.textColor = .systemGreen
         liveLabel.font = .preferredFont(forTextStyle: .caption1)
 
-        let headerStack = UIStackView(arrangedSubviews: [resultHeader, UIView(), detailsButton, liveLabel])
+        let headerStack = UIStackView(arrangedSubviews: [resultHeader, UIView(), liveLabel])
         headerStack.axis = .horizontal
         headerStack.alignment = .center
         headerStack.spacing = 8
 
-        let resultStack = UIStackView(arrangedSubviews: [headerStack, stateLabel, resultView])
+        let controlsStack = UIStackView(arrangedSubviews: [tabVisibilityButton, detailsButton, UIView()])
+        controlsStack.axis = .horizontal
+        controlsStack.alignment = .center
+        controlsStack.spacing = 8
+
+        let resultStack = UIStackView(arrangedSubviews: [headerStack, controlsStack, stateLabel, resultView])
         resultStack.axis = .vertical
         resultStack.spacing = 8
         resultStack.translatesAutoresizingMaskIntoConstraints = false
@@ -219,17 +283,24 @@ class WebInspectorViewController: UIViewController {
             equalTo: debugPanel.topAnchor,
             constant: -8
         )
+        webViewToSafeAreaConstraint = webView.bottomAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor
+        )
+        webViewToDebugButtonConstraint = webView.bottomAnchor.constraint(
+            equalTo: debugButton.topAnchor,
+            constant: -8
+        )
 
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            webViewToSafeAreaConstraint,
 
             debugPanel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             debugPanel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             debugPanel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
-            debugPanel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.48),
+            debugPanel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.36),
 
             resultStack.topAnchor.constraint(equalTo: debugPanel.topAnchor, constant: 14),
             resultStack.leadingAnchor.constraint(equalTo: debugPanel.leadingAnchor, constant: 12),
@@ -241,6 +312,10 @@ class WebInspectorViewController: UIViewController {
         ])
     }
 
+    func refreshTabVisibilityMenu() {
+        tabVisibilityButton.menu = (tabBarController as? RootTabBarController)?.makeTabVisibilityMenu()
+    }
+
     @objc private func toggleDebugPanel() {
         isDebugPanelPresented.toggle()
         updateDebugButton()
@@ -248,16 +323,22 @@ class WebInspectorViewController: UIViewController {
 
         if isDebugPanelPresented {
             debugPanel.isHidden = false
+            webViewToSafeAreaConstraint.isActive = false
             debugButtonToSafeAreaConstraint.isActive = false
             debugButtonToPanelConstraint.isActive = true
+            webViewToDebugButtonConstraint.isActive = true
             readAllFrames()
 
-            UIView.animate(withDuration: 0.25) {
+            UIView.animate(withDuration: 0.25, animations: {
                 self.debugPanel.alpha = 1
                 self.view.layoutIfNeeded()
-            }
+            }, completion: { _ in
+                self.revealInteractiveWebContent()
+            })
         } else {
+            webViewToDebugButtonConstraint.isActive = false
             debugButtonToPanelConstraint.isActive = false
+            webViewToSafeAreaConstraint.isActive = true
             debugButtonToSafeAreaConstraint.isActive = true
 
             UIView.animate(withDuration: 0.25, animations: {
@@ -267,6 +348,18 @@ class WebInspectorViewController: UIViewController {
                 self.debugPanel.isHidden = true
             })
         }
+    }
+
+    private func revealInteractiveWebContent() {
+        let script = #"""
+        (() => {
+          const field = Array.from(document.querySelectorAll('input, textarea, select'))
+            .find((element) => element.type !== 'hidden' && !element.disabled);
+          const target = field || document.querySelector('iframe');
+          target?.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+        })();
+        """#
+        webView.evaluateJavaScript(script)
     }
 
     private func updateDebugButton(hasError: Bool = false) {
@@ -463,6 +556,11 @@ extension WebInspectorViewController: WKNavigationDelegate {
             stateLabel.text = "Page loaded. Waiting for each frame to report its DOM."
         } else {
             renderSnapshots()
+        }
+        if isDebugPanelPresented {
+            DispatchQueue.main.async { [weak self] in
+                self?.revealInteractiveWebContent()
+            }
         }
     }
 
