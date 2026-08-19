@@ -1,3 +1,4 @@
+import SafariServices
 import UIKit
 @preconcurrency import WebKit
 
@@ -12,6 +13,31 @@ final class DirectWebViewController: WebInspectorViewController {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "Safari",
+            style: .plain,
+            target: self,
+            action: #selector(openBalanceInSafari)
+        )
+        navigationItem.leftBarButtonItem?.accessibilityLabel = "Open PayPal balance in Safari"
+    }
+
+    @objc private func openBalanceInSafari() {
+        let configuration = SFSafariViewController.Configuration()
+        configuration.entersReaderIfAvailable = false
+        configuration.barCollapsingEnabled = false
+
+        let safariViewController = SFSafariViewController(
+            url: WebDemoConfiguration.safariBalancePageURL,
+            configuration: configuration
+        )
+        safariViewController.dismissButtonStyle = .done
+        safariViewController.preferredControlTintColor = .systemBlue
+        present(safariViewController, animated: true)
     }
 }
 
