@@ -59,8 +59,8 @@ class DomainRequestHandler(http.server.SimpleHTTPRequestHandler):
         if not clean_path:
             default_pages = {
                 "samsungweb.localhost": "direct.html",
-                "paypalweb.localhost": "embedded.html",
-                "checkoutweb.localhost": "deep.html",
+                "paypalweb.localhost": "balance.html",
+                "checkoutweb.localhost": "send-money.html",
             }
             clean_path = default_pages.get(host, "direct.html")
 
@@ -96,8 +96,8 @@ def main() -> None:
     print(f"Samsungweb iframe page: https://samsungweb.localhost:{PORT}/iframe.html", flush=True)
     print(f"Samsungweb multi-level page: https://samsungweb.localhost:{PORT}/multilevel.html", flush=True)
     print(f"PayPal Sandbox page: https://samsungweb.localhost:{PORT}/paypal-sandbox-container.html", flush=True)
-    print(f"Paypalweb: https://paypalweb.localhost:{PORT}/embedded.html", flush=True)
-    print(f"Checkoutweb: https://checkoutweb.localhost:{PORT}/deep.html", flush=True)
+    print(f"Paypalweb balance: https://paypalweb.localhost:{PORT}/balance.html", flush=True)
+    print(f"Checkoutweb send money: https://checkoutweb.localhost:{PORT}/send-money.html", flush=True)
     print("Press Control-C to stop the server.", flush=True)
     try:
         server.serve_forever()

@@ -94,7 +94,7 @@ cd "$(git rev-parse --show-toplevel)"
 Pass these after the bundle identifier in `simctl launch`:
 
 - No arguments: open the `Samsungweb` direct-page tab.
-- `--iframe`: open the single cross-origin iframe tab.
+- `--iframe`: open the balance + send-money cross-origin iframe tab.
 - `--multilevel`: open the Samsungweb → Paypalweb → Checkoutweb nested iframe tab.
 - `--paypal-sandbox`: open the PayPal SDK Sandbox tab.
 - `--debug`: automatically open the native DEBUG panel; combine it with any mode.
@@ -126,7 +126,9 @@ Important pages:
 
 ```text
 Samsungweb direct:       /direct.html
-Single iframe:           /iframe.html
+Money iframe root:       /iframe.html
+Paypalweb balance:       /balance.html
+Checkoutweb send money:  /send-money.html
 Nested iframe root:      /multilevel.html
 PayPal Sandbox root:     /paypal-sandbox-container.html
 Paypalweb nested page:   /nested.html
@@ -171,6 +173,8 @@ Expected automated test result: two tests, zero failures.
 Expected visual checks:
 
 - All four tabs are visible.
+- The Money iframes tab renders one balance frame and one send-money frame; submitting the form updates both frames.
+- DEBUG count is `3` for the Money iframes demo.
 - The nested tab renders Samsungweb, Paypalweb, and Checkoutweb.
 - DEBUG count is `3` for the nested demo.
 - PayPal Sandbox renders official PayPal test buttons.

@@ -5,7 +5,8 @@ enum WebDemoConfiguration {
     static let iframeContainerURL = URL(string: "https://samsungweb.localhost:8443/iframe.html")!
     static let multiLevelPageURL = URL(string: "https://samsungweb.localhost:8443/multilevel.html")!
     static let paypalSandboxPageURL = URL(string: "https://samsungweb.localhost:8443/paypal-sandbox-container.html")!
-    static let embeddedPageURL = URL(string: "https://paypalweb.localhost:8443/embedded.html")!
+    static let balanceIframeURL = URL(string: "https://paypalweb.localhost:8443/balance.html")!
+    static let sendMoneyIframeURL = URL(string: "https://checkoutweb.localhost:8443/send-money.html")!
     static let paypalSandboxIframeURL = URL(string: "https://paypalweb.localhost:8443/paypal-sandbox-checkout.html")!
     static let deepEmbeddedPageURL = URL(string: "https://checkoutweb.localhost:8443/deep.html")!
 

@@ -13,7 +13,7 @@ final class RootTabBarController: UITabBarController {
 
         let iframe = IframeWebViewController()
         iframe.tabBarItem = UITabBarItem(
-            title: "Cross-Origin iframe",
+            title: "Money iframes",
             image: UIImage(systemName: "rectangle.inset.filled"),
             selectedImage: UIImage(systemName: "rectangle.inset.filled")
         )

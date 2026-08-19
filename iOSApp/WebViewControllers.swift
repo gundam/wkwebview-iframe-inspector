@@ -18,7 +18,7 @@ final class DirectWebViewController: WebInspectorViewController {
 final class IframeWebViewController: WebInspectorViewController {
     init() {
         super.init(
-            pageTitle: "Samsungweb + Paypalweb",
+            pageTitle: "Balance + Send Money",
             url: WebDemoConfiguration.iframeContainerURL
         )
     }

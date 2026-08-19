@@ -21,10 +21,10 @@ Test origins:
 - Paypalweb: `https://paypalweb.localhost:8443`
 - Checkoutweb: `https://checkoutweb.localhost:8443`
 
-The tabs demonstrate three cases:
+The tabs demonstrate four cases:
 
 1. `Samsungweb` loads a direct page and inspects its form fields.
-2. `Cross-Origin iframe` loads Samsungweb with a Paypalweb iframe.
+2. `Money iframes` loads a Samsungweb container with two cross-origin frames: a Paypalweb balance card and a Checkoutweb send-money form. Submitting the local demo form updates the balance through origin-checked `postMessage`; no real money is moved.
 3. `Multi-Level` loads this three-origin chain:
 
    ```text

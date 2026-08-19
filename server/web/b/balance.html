@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Paypalweb Balance</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 18px;
+      font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172554;
+      background: linear-gradient(145deg, #eff6ff, #eef2ff);
+    }
+    .eyebrow { margin: 0 0 8px; color: #2563eb; font-size: 12px; font-weight: 800; letter-spacing: .09em; }
+    h2 { margin: 0; font-size: 19px; }
+    .account { margin: 4px 0 18px; color: #64748b; font-size: 13px; }
+    .amount { margin: 0; color: #0f172a; font-size: 36px; font-weight: 800; letter-spacing: -.04em; }
+    .available { margin: 5px 0 18px; color: #475569; }
+    .available strong { color: #047857; }
+    .activity { padding-top: 14px; border-top: 1px solid rgba(37, 99, 235, .18); }
+    .activity-title { margin-bottom: 9px; font-size: 12px; font-weight: 800; text-transform: uppercase; color: #64748b; }
+    .row { display: flex; justify-content: space-between; gap: 14px; padding: 6px 0; color: #334155; }
+    .row strong { color: #0f172a; white-space: nowrap; }
+    [data-native-summary] { display: none; }
+  </style>
+</head>
+<body data-page-owner="paypalweb-balance">
+  <p class="eyebrow">PAYPALWEB · DEMO WALLET</p>
+  <h2>Available balance</h2>
+  <p class="account">Personal account ···· 4821</p>
+  <p class="amount" id="current-balance">$12,480.50</p>
+  <p class="available">Available now: <strong id="available-balance">$12,350.50</strong></p>
+
+  <section class="activity" aria-label="Recent activity">
+    <div class="activity-title">Recent activity</div>
+    <div id="activity-list">
+      <div class="row"><span>Demo salary</span><strong>+$2,400.00</strong></div>
+      <div class="row"><span>Coffee shop</span><strong>−$6.80</strong></div>
+    </div>
+  </section>
+
+  <span id="native-summary" data-native-summary>Balance $12,480.50 · Available $12,350.50</span>
+
+  <script>
+    (() => {
+      const parentOrigin = 'https://samsungweb.localhost:8443';
+      let balance = 12480.50;
+      let available = 12350.50;
+
+      const money = (value) => new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(value);
+
+      window.addEventListener('message', (event) => {
+        if (event.origin !== parentOrigin || event.source !== parent) return;
+        if (event.data?.type !== 'demo-transfer') return;
+
+        const amount = Number(event.data.amount);
+        if (!Number.isFinite(amount) || amount <= 0 || amount > available) return;
+
+        balance -= amount;
+        available -= amount;
+        document.querySelector('#current-balance').textContent = money(balance);
+        document.querySelector('#available-balance').textContent = money(available);
+        document.querySelector('#native-summary').textContent =
+          `Balance ${money(balance)} · Available ${money(available)}`;
+
+        const row = document.createElement('div');
+        row.className = 'row';
+        const recipient = document.createElement('span');
+        recipient.textContent = `Sent to ${event.data.recipient || 'demo recipient'}`;
+        const value = document.createElement('strong');
+        value.textContent = `−${money(amount)}`;
+        row.append(recipient, value);
+        document.querySelector('#activity-list').prepend(row);
+
+        parent.postMessage({
+          type: 'demo-balance-updated',
+          available: money(available)
+        }, parentOrigin);
+      });
+    })();
+  </script>
+</body>
+</html>

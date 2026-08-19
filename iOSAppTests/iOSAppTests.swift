@@ -7,14 +7,17 @@ final class iOSAppTests: XCTestCase {
         XCTAssertEqual(WebDemoConfiguration.iframeContainerURL.host, "samsungweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.multiLevelPageURL.host, "samsungweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.paypalSandboxPageURL.host, "samsungweb.localhost")
-        XCTAssertEqual(WebDemoConfiguration.embeddedPageURL.host, "paypalweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.balanceIframeURL.host, "paypalweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.balanceIframeURL.path, "/balance.html")
+        XCTAssertEqual(WebDemoConfiguration.sendMoneyIframeURL.host, "checkoutweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.sendMoneyIframeURL.path, "/send-money.html")
         XCTAssertEqual(WebDemoConfiguration.paypalSandboxIframeURL.host, "paypalweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.deepEmbeddedPageURL.host, "checkoutweb.localhost")
 
         let hosts = Set([
             WebDemoConfiguration.multiLevelPageURL.host,
-            WebDemoConfiguration.embeddedPageURL.host,
-            WebDemoConfiguration.deepEmbeddedPageURL.host
+            WebDemoConfiguration.balanceIframeURL.host,
+            WebDemoConfiguration.sendMoneyIframeURL.host
         ].compactMap { $0 })
         XCTAssertEqual(hosts.count, 3)
     }
