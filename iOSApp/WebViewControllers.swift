@@ -4,7 +4,7 @@ import UIKit
 final class DirectWebViewController: WebInspectorViewController {
     init() {
         super.init(
-            pageTitle: "Inspect Samsungweb",
+            pageTitle: "Direct PayPal",
             url: WebDemoConfiguration.directPageURL
         )
     }

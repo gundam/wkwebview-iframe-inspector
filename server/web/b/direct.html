@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Direct PayPal Page</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 20px;
+      font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #142c8e;
+      background: linear-gradient(160deg, #f7fbff 0%, #ffffff 52%, #eef6ff 100%);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: #003087;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #009cde; }
+    h1 { margin: 22px 0 8px; font-size: 32px; letter-spacing: -.03em; }
+    .lead { margin: 0; color: #334e68; font-size: 18px; line-height: 1.45; }
+    .explanation {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid #b8d8f8;
+      border-radius: 16px;
+      color: #173b67;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 12px 30px rgba(0, 48, 135, .08);
+    }
+    .explanation strong { display: block; margin-bottom: 5px; color: #003087; }
+    label { display: block; margin-bottom: 7px; color: #243b53; font-size: 13px; font-weight: 700; }
+    input {
+      width: 100%;
+      min-height: 48px;
+      padding: 11px 13px;
+      border: 2px solid #8ec8f0;
+      border-radius: 12px;
+      color: #102a43;
+      background: #ffffff;
+      font: inherit;
+      outline: none;
+    }
+    input:focus { border-color: #0070ba; box-shadow: 0 0 0 4px rgba(0, 112, 186, .12); }
+    [data-native-summary] { display: none; }
+  </style>
+</head>
+<body data-page-owner="paypalweb-direct">
+  <span class="brand"><span class="dot"></span>PAYPAL · DIRECT PAGE</span>
+  <h1>This is a PayPal page</h1>
+  <p class="lead">This PayPal page is rendered directly in the iOS WebView.</p>
+
+  <div class="explanation">
+    <strong>No iframe is used</strong>
+    Native inspection reads this PayPal page as the main frame.
+  </div>
+
+  <label for="direct-value">Demo page value</label>
+  <input id="direct-value" name="directValue" value="Direct value from the PayPal page" autocomplete="off">
+
+  <span data-native-summary>PayPal page · Rendered directly · No iframe</span>
+</body>
+</html>

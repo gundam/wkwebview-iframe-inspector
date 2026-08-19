@@ -20,9 +20,9 @@ This repository is an iOS Simulator-only `WKWebView` inspection demo. Use this f
 - `iOSApp/WebDemoConfiguration.swift`: all demo URLs and local-host allowlist.
 - `server/start.sh`: prepares the local certificate, installs it into every booted simulator, and starts the HTTPS server.
 - `server/https_server.py`: certificate generation and host-based routing.
-- `server/web/a`: Samsungweb pages.
-- `server/web/b`: Paypalweb pages and PayPal Sandbox wrapper.
-- `server/web/c`: Checkoutweb deepest iframe page.
+- `server/web/a`: Samsungweb outer/container pages.
+- `server/web/b`: Paypalweb direct, balance, Checkout, nested, and PayPal Sandbox pages.
+- `server/web/c`: Checkoutweb deepest nested-iframe page.
 - `iOSAppTests/iOSAppTests.swift`: URL/origin/allowlist tests.
 
 ## Requirements
@@ -93,7 +93,7 @@ cd "$(git rev-parse --show-toplevel)"
 
 Pass these after the bundle identifier in `simctl launch`:
 
-- No arguments: open the `Samsungweb` direct-page tab.
+- No arguments: open the directly rendered `Paypalweb` page tab.
 - `--balance` or legacy `--iframe`: open the balance iframe tab.
 - `--send-money`: open the send-money iframe tab.
 - `--multilevel`: open the Samsungweb → Paypalweb → Checkoutweb nested iframe tab.
@@ -126,11 +126,11 @@ https://checkoutweb.localhost:8443  -> server/web/c
 Important pages:
 
 ```text
-Samsungweb direct:       /direct.html
+Paypalweb direct:        /direct.html
 Balance iframe root:     /iframe.html
 Send Money iframe root:  /send-money-iframe.html
 Paypalweb balance:       /balance.html
-Checkoutweb send money:  /send-money.html
+Paypalweb send money:    /send-money.html
 Nested iframe root:      /multilevel.html
 PayPal Sandbox root:     /paypal-sandbox-container.html
 Paypalweb nested page:   /nested.html
@@ -178,7 +178,7 @@ Expected visual checks:
 - All five tabs are visible.
 - Balance and Send Money are separate native tabs, and each renders exactly one cross-origin iframe.
 - DEBUG count is `2` in both Balance and Send Money.
-- Submitting the Send Money form returns a local demo reference through strict-origin `postMessage`.
+- The Send Money iframe contains exactly one amount input and updates the compact DEBUG result while typing.
 - The nested tab renders Samsungweb, Paypalweb, and Checkoutweb.
 - DEBUG count is `3` for the nested demo.
 - PayPal Sandbox renders official PayPal test buttons.

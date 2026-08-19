@@ -8,25 +8,36 @@
     * { box-sizing: border-box; }
     body { font: 16px -apple-system, sans-serif; margin: 18px; color: #182230; background: #f8fafc; }
     h1 { margin-bottom: 6px; font-size: 26px; }
-    .intro { margin: 0 0 18px; color: #64748b; }
+    .owner {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: #1428a0;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .05em;
+    }
+    .intro { margin: 10px 0 18px; color: #475569; line-height: 1.4; }
     .frame-label { display: flex; justify-content: space-between; margin: 16px 2px 7px; font-size: 13px; font-weight: 800; }
     .frame-label code { color: #6366f1; font-weight: 600; }
     iframe { width: 100%; border: 2px solid #818cf8; border-radius: 15px; background: white; box-shadow: 0 8px 24px rgba(15, 23, 42, .08); }
-    #balance-frame { height: 330px; }
+    #balance-frame { height: 270px; }
     [data-native-summary] { display: none; }
   </style>
 </head>
 <body>
+  <span class="owner">SAMSUNG · OUTER WEBPAGE</span>
   <h1>Balance iframe</h1>
-  <p class="intro">A Paypalweb balance page loaded as one cross-origin iframe.</p>
+  <p class="intro">This is a Samsung webpage. The section below is an iframe loaded from a PayPal webpage.</p>
 
-  <div class="frame-label"><span>Account balance</span><code>paypalweb.localhost</code></div>
+  <div class="frame-label"><span>PayPal page loaded in an iframe</span><code>paypalweb.localhost</code></div>
   <iframe
     id="balance-frame"
     title="Paypalweb balance frame"
     src="https://paypalweb.localhost:8443/balance.html">
   </iframe>
 
-  <span data-native-summary>Balance iframe · Paypalweb demo wallet</span>
+  <span data-native-summary>Samsung outer webpage · PayPal balance iframe</span>
 </body>
 </html>

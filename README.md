@@ -23,9 +23,9 @@ Test origins:
 
 The tabs demonstrate five cases:
 
-1. `Samsungweb` loads a direct page and inspects its form fields.
-2. `Balance` loads a Samsungweb container with one Paypalweb balance iframe.
-3. `Send Money` loads a separate Samsungweb container with one Checkoutweb transfer iframe. Submitting the form returns a local demo reference through origin-checked `postMessage`; no real money is moved.
+1. `Direct` renders a Paypalweb page directly as the main frame, with no iframe.
+2. `Balance` loads a Samsungweb outer page with one Paypalweb balance iframe. Both page owners are labeled in the UI.
+3. `Send Money` loads a separate Samsungweb outer page with one Paypalweb Checkout iframe. The checkout demo contains one amount input and updates the native DEBUG result while typing; no real money is moved.
 4. `Nested` loads this three-origin chain:
 
    ```text

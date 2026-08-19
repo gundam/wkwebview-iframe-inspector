@@ -4,6 +4,8 @@ import XCTest
 final class iOSAppTests: XCTestCase {
     func testDemoUsesHTTPSAndThreeDifferentOrigins() {
         XCTAssertEqual(WebDemoConfiguration.directPageURL.scheme, "https")
+        XCTAssertEqual(WebDemoConfiguration.directPageURL.host, "paypalweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.directPageURL.path, "/direct.html")
         XCTAssertEqual(WebDemoConfiguration.balanceContainerURL.host, "samsungweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.balanceContainerURL.path, "/iframe.html")
         XCTAssertEqual(WebDemoConfiguration.sendMoneyContainerURL.host, "samsungweb.localhost")
@@ -12,15 +14,15 @@ final class iOSAppTests: XCTestCase {
         XCTAssertEqual(WebDemoConfiguration.paypalSandboxPageURL.host, "samsungweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.balanceIframeURL.host, "paypalweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.balanceIframeURL.path, "/balance.html")
-        XCTAssertEqual(WebDemoConfiguration.sendMoneyIframeURL.host, "checkoutweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.sendMoneyIframeURL.host, "paypalweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.sendMoneyIframeURL.path, "/send-money.html")
         XCTAssertEqual(WebDemoConfiguration.paypalSandboxIframeURL.host, "paypalweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.deepEmbeddedPageURL.host, "checkoutweb.localhost")
 
         let hosts = Set([
-            WebDemoConfiguration.multiLevelPageURL.host,
-            WebDemoConfiguration.balanceIframeURL.host,
-            WebDemoConfiguration.sendMoneyIframeURL.host
+            WebDemoConfiguration.balanceContainerURL.host,
+            WebDemoConfiguration.directPageURL.host,
+            WebDemoConfiguration.deepEmbeddedPageURL.host
         ].compactMap { $0 })
         XCTAssertEqual(hosts.count, 3)
     }
