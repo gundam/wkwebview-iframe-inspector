@@ -274,7 +274,7 @@ class WebInspectorViewController: UIViewController {
             debugPanel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             debugPanel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             debugPanel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
-            debugPanel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.48),
+            debugPanel.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.36),
 
             resultStack.topAnchor.constraint(equalTo: debugPanel.topAnchor, constant: 14),
             resultStack.leadingAnchor.constraint(equalTo: debugPanel.leadingAnchor, constant: 12),
