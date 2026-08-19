@@ -166,6 +166,18 @@ class WebInspectorViewController: UIViewController {
         return button
     }()
 
+    private let tabVisibilityButton: UIButton = {
+        var configuration = UIButton.Configuration.tinted()
+        configuration.title = "Tabs"
+        configuration.image = UIImage(systemName: "rectangle.stack")
+        configuration.imagePadding = 5
+        configuration.buttonSize = .small
+        let button = UIButton(configuration: configuration)
+        button.accessibilityLabel = "Choose visible demo tabs"
+        button.showsMenuAsPrimaryAction = true
+        return button
+    }()
+
     init(pageTitle: String, url: URL) {
         pageURL = url
         super.init(nibName: nil, bundle: nil)
@@ -196,6 +208,11 @@ class WebInspectorViewController: UIViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshTabVisibilityMenu()
+    }
+
     deinit {
         webView.configuration.userContentController.removeScriptMessageHandler(forName: "frameSnapshot")
     }
@@ -210,12 +227,17 @@ class WebInspectorViewController: UIViewController {
         liveLabel.textColor = .systemGreen
         liveLabel.font = .preferredFont(forTextStyle: .caption1)
 
-        let headerStack = UIStackView(arrangedSubviews: [resultHeader, UIView(), detailsButton, liveLabel])
+        let headerStack = UIStackView(arrangedSubviews: [resultHeader, UIView(), liveLabel])
         headerStack.axis = .horizontal
         headerStack.alignment = .center
         headerStack.spacing = 8
 
-        let resultStack = UIStackView(arrangedSubviews: [headerStack, stateLabel, resultView])
+        let controlsStack = UIStackView(arrangedSubviews: [tabVisibilityButton, detailsButton, UIView()])
+        controlsStack.axis = .horizontal
+        controlsStack.alignment = .center
+        controlsStack.spacing = 8
+
+        let resultStack = UIStackView(arrangedSubviews: [headerStack, controlsStack, stateLabel, resultView])
         resultStack.axis = .vertical
         resultStack.spacing = 8
         resultStack.translatesAutoresizingMaskIntoConstraints = false
@@ -253,6 +275,10 @@ class WebInspectorViewController: UIViewController {
             debugButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             debugButtonToSafeAreaConstraint
         ])
+    }
+
+    func refreshTabVisibilityMenu() {
+        tabVisibilityButton.menu = (tabBarController as? RootTabBarController)?.makeTabVisibilityMenu()
     }
 
     @objc private func toggleDebugPanel() {

@@ -37,7 +37,7 @@ The tabs demonstrate five cases:
 
 Native code captures every frame's depth, URL, origin, title, body text, full HTML, and live form values. The injected collection script runs in every frame, so it does not try to bypass the browser's same-origin policy from the parent page.
 
-Every screen includes a floating `DEBUG` button. The panel defaults to a concise content-and-fields summary; tap `More` for frame metadata and full HTML, or `Less` to return to the summary. Results continue updating when form values, DOM content, or iframe content changes.
+Every screen includes a floating `DEBUG` button. The panel defaults to a concise content-and-fields summary; tap `More` for frame metadata and full HTML, or `Less` to return to the summary. Use the `Tabs` menu to independently show or hide Direct, Balance, Send Money, Nested, and Sandbox for different demo combinations. At least one page always remains visible. Results continue updating when form values, DOM content, or iframe content changes.
 
 > The local server uses an automatically generated self-signed certificate. The app only allows `.localhost` development hosts. This setup is for simulator testing only and must not be used in production.
 
