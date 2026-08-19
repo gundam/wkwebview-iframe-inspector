@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Samsungweb Money iframe Lab</title>
+  <title>Samsungweb Balance iframe</title>
   <style>
     * { box-sizing: border-box; }
     body { font: 16px -apple-system, sans-serif; margin: 18px; color: #182230; background: #f8fafc; }
@@ -13,13 +13,12 @@
     .frame-label code { color: #6366f1; font-weight: 600; }
     iframe { width: 100%; border: 2px solid #818cf8; border-radius: 15px; background: white; box-shadow: 0 8px 24px rgba(15, 23, 42, .08); }
     #balance-frame { height: 330px; }
-    #send-frame { height: 475px; border-color: #14b8a6; }
     [data-native-summary] { display: none; }
   </style>
 </head>
 <body>
-  <h1>Money iframe Lab</h1>
-  <p class="intro">Two local cross-origin frames with live native inspection.</p>
+  <h1>Balance iframe</h1>
+  <p class="intro">A Paypalweb balance page loaded as one cross-origin iframe.</p>
 
   <div class="frame-label"><span>Account balance</span><code>paypalweb.localhost</code></div>
   <iframe
@@ -28,34 +27,6 @@
     src="https://paypalweb.localhost:8443/balance.html">
   </iframe>
 
-  <div class="frame-label"><span>Send money</span><code>checkoutweb.localhost</code></div>
-  <iframe
-    id="send-frame"
-    title="Checkoutweb send money frame"
-    src="https://checkoutweb.localhost:8443/send-money.html">
-  </iframe>
-
-  <span data-native-summary>Money iframe Lab · Balance frame · Send money frame</span>
-
-  <script>
-    (() => {
-      const balanceOrigin = 'https://paypalweb.localhost:8443';
-      const sendOrigin = 'https://checkoutweb.localhost:8443';
-      const balanceFrame = document.querySelector('#balance-frame');
-      const sendFrame = document.querySelector('#send-frame');
-
-      window.addEventListener('message', (event) => {
-        if (event.origin === sendOrigin && event.source === sendFrame.contentWindow
-            && event.data?.type === 'demo-transfer') {
-          balanceFrame.contentWindow.postMessage(event.data, balanceOrigin);
-          return;
-        }
-        if (event.origin === balanceOrigin && event.source === balanceFrame.contentWindow
-            && event.data?.type === 'demo-balance-updated') {
-          sendFrame.contentWindow.postMessage(event.data, sendOrigin);
-        }
-      });
-    })();
-  </script>
+  <span data-native-summary>Balance iframe · Paypalweb demo wallet</span>
 </body>
 </html>

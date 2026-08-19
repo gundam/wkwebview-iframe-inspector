@@ -15,11 +15,25 @@ final class DirectWebViewController: WebInspectorViewController {
     }
 }
 
-final class IframeWebViewController: WebInspectorViewController {
+final class BalanceIframeViewController: WebInspectorViewController {
     init() {
         super.init(
-            pageTitle: "Balance + Send Money",
-            url: WebDemoConfiguration.iframeContainerURL
+            pageTitle: "Balance iframe",
+            url: WebDemoConfiguration.balanceContainerURL
+        )
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class SendMoneyIframeViewController: WebInspectorViewController {
+    init() {
+        super.init(
+            pageTitle: "Send Money iframe",
+            url: WebDemoConfiguration.sendMoneyContainerURL
         )
     }
 

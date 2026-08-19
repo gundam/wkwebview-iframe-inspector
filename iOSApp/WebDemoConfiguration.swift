@@ -2,7 +2,8 @@ import Foundation
 
 enum WebDemoConfiguration {
     static let directPageURL = URL(string: "https://samsungweb.localhost:8443/direct.html")!
-    static let iframeContainerURL = URL(string: "https://samsungweb.localhost:8443/iframe.html")!
+    static let balanceContainerURL = URL(string: "https://samsungweb.localhost:8443/iframe.html")!
+    static let sendMoneyContainerURL = URL(string: "https://samsungweb.localhost:8443/send-money-iframe.html")!
     static let multiLevelPageURL = URL(string: "https://samsungweb.localhost:8443/multilevel.html")!
     static let paypalSandboxPageURL = URL(string: "https://samsungweb.localhost:8443/paypal-sandbox-container.html")!
     static let balanceIframeURL = URL(string: "https://paypalweb.localhost:8443/balance.html")!

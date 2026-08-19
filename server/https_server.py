@@ -94,6 +94,7 @@ def main() -> None:
 
     print(f"Samsungweb: https://samsungweb.localhost:{PORT}/direct.html", flush=True)
     print(f"Samsungweb iframe page: https://samsungweb.localhost:{PORT}/iframe.html", flush=True)
+    print(f"Samsungweb send-money iframe page: https://samsungweb.localhost:{PORT}/send-money-iframe.html", flush=True)
     print(f"Samsungweb multi-level page: https://samsungweb.localhost:{PORT}/multilevel.html", flush=True)
     print(f"PayPal Sandbox page: https://samsungweb.localhost:{PORT}/paypal-sandbox-container.html", flush=True)
     print(f"Paypalweb balance: https://paypalweb.localhost:{PORT}/balance.html", flush=True)

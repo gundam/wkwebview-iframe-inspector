@@ -104,9 +104,9 @@
 
       window.addEventListener('message', (event) => {
         if (event.origin !== parentOrigin || event.source !== parent) return;
-        if (event.data?.type !== 'demo-balance-updated') return;
-        status.textContent = `Demo transfer complete. Available: ${event.data.available}`;
-        summary.textContent = `Sent · Available ${event.data.available}`;
+        if (event.data?.type !== 'demo-transfer-complete') return;
+        status.textContent = `Demo transfer complete. Reference: ${event.data.reference}`;
+        summary.textContent = `Sent · USD ${Number(amount.value).toFixed(2)} · ${recipient.value}`;
       });
     })();
   </script>

@@ -21,18 +21,19 @@ Test origins:
 - Paypalweb: `https://paypalweb.localhost:8443`
 - Checkoutweb: `https://checkoutweb.localhost:8443`
 
-The tabs demonstrate four cases:
+The tabs demonstrate five cases:
 
 1. `Samsungweb` loads a direct page and inspects its form fields.
-2. `Money iframes` loads a Samsungweb container with two cross-origin frames: a Paypalweb balance card and a Checkoutweb send-money form. Submitting the local demo form updates the balance through origin-checked `postMessage`; no real money is moved.
-3. `Multi-Level` loads this three-origin chain:
+2. `Balance` loads a Samsungweb container with one Paypalweb balance iframe.
+3. `Send Money` loads a separate Samsungweb container with one Checkoutweb transfer iframe. Submitting the form returns a local demo reference through origin-checked `postMessage`; no real money is moved.
+4. `Nested` loads this three-origin chain:
 
    ```text
    Samsungweb (depth 0)
    └── Paypalweb (depth 1)
        └── Checkoutweb (depth 2)
    ```
-4. `PayPal Sandbox` loads a `paypalweb.localhost` iframe wrapper that uses the official PayPal JavaScript SDK with `client-id=test`. The debug panel reads only the two local test frames and the documented checkout status; it intentionally does not inject into PayPal-owned frames or read account credentials.
+5. `Sandbox` loads a `paypalweb.localhost` iframe wrapper that uses the official PayPal JavaScript SDK with `client-id=test`. The debug panel reads only the two local test frames and the documented checkout status; it intentionally does not inject into PayPal-owned frames or read account credentials.
 
 Native code captures every frame's depth, URL, origin, title, body text, full HTML, and live form values. The injected collection script runs in every frame, so it does not try to bypass the browser's same-origin policy from the parent page.
 

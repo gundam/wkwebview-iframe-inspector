@@ -15,7 +15,7 @@ This repository is an iOS Simulator-only `WKWebView` inspection demo. Use this f
 - `iOSApp.xcodeproj`: Xcode project; scheme is `iOSApp`.
 - `iOSApp/iOSAppApp.swift`: SwiftUI app entry point.
 - `iOSApp/ContentView.swift`: hosts the UIKit tab controller.
-- `iOSApp/RootTabBarController.swift`: creates the four demo tabs and handles launch arguments.
+- `iOSApp/RootTabBarController.swift`: creates the five demo tabs and handles launch arguments.
 - `iOSApp/WebViewControllers.swift`: `WKWebView`, injected collector, live frame snapshots, compact DEBUG UI, and `More` details.
 - `iOSApp/WebDemoConfiguration.swift`: all demo URLs and local-host allowlist.
 - `server/start.sh`: prepares the local certificate, installs it into every booted simulator, and starts the HTTPS server.
@@ -94,7 +94,8 @@ cd "$(git rev-parse --show-toplevel)"
 Pass these after the bundle identifier in `simctl launch`:
 
 - No arguments: open the `Samsungweb` direct-page tab.
-- `--iframe`: open the balance + send-money cross-origin iframe tab.
+- `--balance` or legacy `--iframe`: open the balance iframe tab.
+- `--send-money`: open the send-money iframe tab.
 - `--multilevel`: open the Samsungweb → Paypalweb → Checkoutweb nested iframe tab.
 - `--paypal-sandbox`: open the PayPal SDK Sandbox tab.
 - `--debug`: automatically open the native DEBUG panel; combine it with any mode.
@@ -126,7 +127,8 @@ Important pages:
 
 ```text
 Samsungweb direct:       /direct.html
-Money iframe root:       /iframe.html
+Balance iframe root:     /iframe.html
+Send Money iframe root:  /send-money-iframe.html
 Paypalweb balance:       /balance.html
 Checkoutweb send money:  /send-money.html
 Nested iframe root:      /multilevel.html
@@ -172,9 +174,10 @@ Expected automated test result: two tests, zero failures.
 
 Expected visual checks:
 
-- All four tabs are visible.
-- The Money iframes tab renders one balance frame and one send-money frame; submitting the form updates both frames.
-- DEBUG count is `3` for the Money iframes demo.
+- All five tabs are visible.
+- Balance and Send Money are separate native tabs, and each renders exactly one cross-origin iframe.
+- DEBUG count is `2` in both Balance and Send Money.
+- Submitting the Send Money form returns a local demo reference through strict-origin `postMessage`.
 - The nested tab renders Samsungweb, Paypalweb, and Checkoutweb.
 - DEBUG count is `3` for the nested demo.
 - PayPal Sandbox renders official PayPal test buttons.

@@ -4,7 +4,10 @@ import XCTest
 final class iOSAppTests: XCTestCase {
     func testDemoUsesHTTPSAndThreeDifferentOrigins() {
         XCTAssertEqual(WebDemoConfiguration.directPageURL.scheme, "https")
-        XCTAssertEqual(WebDemoConfiguration.iframeContainerURL.host, "samsungweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.balanceContainerURL.host, "samsungweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.balanceContainerURL.path, "/iframe.html")
+        XCTAssertEqual(WebDemoConfiguration.sendMoneyContainerURL.host, "samsungweb.localhost")
+        XCTAssertEqual(WebDemoConfiguration.sendMoneyContainerURL.path, "/send-money-iframe.html")
         XCTAssertEqual(WebDemoConfiguration.multiLevelPageURL.host, "samsungweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.paypalSandboxPageURL.host, "samsungweb.localhost")
         XCTAssertEqual(WebDemoConfiguration.balanceIframeURL.host, "paypalweb.localhost")
