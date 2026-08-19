@@ -147,6 +147,7 @@ Checkoutweb deep frame:  /deep.html
 5. `WKScriptMessage.frameInfo` lets native code associate the snapshot with its frame.
 6. The DEBUG panel defaults to a compact highlighted summary. `More` displays URL, origin, frame ID, body text, and full HTML.
 7. The DEBUG `Tabs` menu controls which demo pages appear in the native tab bar; it always keeps at least one page visible and includes `Show All`.
+8. Opening DEBUG docks the WebView above the panel instead of covering it and scrolls the first editable field or iframe into view, so web inputs remain reachable during live inspection.
 
 PayPal Sandbox pages use explicit `[data-native-summary]` text and strict-origin `postMessage`, so the compact UI shows results such as:
 
@@ -185,6 +186,7 @@ Expected visual checks:
 - DEBUG count is `2` for PayPal Sandbox and compact content fits without scrolling.
 - Tapping `More` shows full details; `Less` returns to the compact view.
 - The DEBUG `Tabs` menu can hide and restore each demo page independently; hiding the active page selects the first remaining page.
+- With DEBUG open, the Send Money amount input remains reachable by scrolling and live changes still appear in the native result.
 
 ## Common failures
 

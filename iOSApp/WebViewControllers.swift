@@ -79,6 +79,8 @@ class WebInspectorViewController: UIViewController {
     private var isShowingFullDetails = false
     private var debugButtonToSafeAreaConstraint: NSLayoutConstraint!
     private var debugButtonToPanelConstraint: NSLayoutConstraint!
+    private var webViewToSafeAreaConstraint: NSLayoutConstraint!
+    private var webViewToDebugButtonConstraint: NSLayoutConstraint!
 
     private lazy var webView: WKWebView = {
         let contentController = WKUserContentController()
@@ -255,12 +257,19 @@ class WebInspectorViewController: UIViewController {
             equalTo: debugPanel.topAnchor,
             constant: -8
         )
+        webViewToSafeAreaConstraint = webView.bottomAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor
+        )
+        webViewToDebugButtonConstraint = webView.bottomAnchor.constraint(
+            equalTo: debugButton.topAnchor,
+            constant: -8
+        )
 
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            webViewToSafeAreaConstraint,
 
             debugPanel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             debugPanel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
@@ -288,16 +297,22 @@ class WebInspectorViewController: UIViewController {
 
         if isDebugPanelPresented {
             debugPanel.isHidden = false
+            webViewToSafeAreaConstraint.isActive = false
             debugButtonToSafeAreaConstraint.isActive = false
             debugButtonToPanelConstraint.isActive = true
+            webViewToDebugButtonConstraint.isActive = true
             readAllFrames()
 
-            UIView.animate(withDuration: 0.25) {
+            UIView.animate(withDuration: 0.25, animations: {
                 self.debugPanel.alpha = 1
                 self.view.layoutIfNeeded()
-            }
+            }, completion: { _ in
+                self.revealInteractiveWebContent()
+            })
         } else {
+            webViewToDebugButtonConstraint.isActive = false
             debugButtonToPanelConstraint.isActive = false
+            webViewToSafeAreaConstraint.isActive = true
             debugButtonToSafeAreaConstraint.isActive = true
 
             UIView.animate(withDuration: 0.25, animations: {
@@ -307,6 +322,18 @@ class WebInspectorViewController: UIViewController {
                 self.debugPanel.isHidden = true
             })
         }
+    }
+
+    private func revealInteractiveWebContent() {
+        let script = #"""
+        (() => {
+          const field = Array.from(document.querySelectorAll('input, textarea, select'))
+            .find((element) => element.type !== 'hidden' && !element.disabled);
+          const target = field || document.querySelector('iframe');
+          target?.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+        })();
+        """#
+        webView.evaluateJavaScript(script)
     }
 
     private func updateDebugButton(hasError: Bool = false) {
@@ -503,6 +530,11 @@ extension WebInspectorViewController: WKNavigationDelegate {
             stateLabel.text = "Page loaded. Waiting for each frame to report its DOM."
         } else {
             renderSnapshots()
+        }
+        if isDebugPanelPresented {
+            DispatchQueue.main.async { [weak self] in
+                self?.revealInteractiveWebContent()
+            }
         }
     }
 
