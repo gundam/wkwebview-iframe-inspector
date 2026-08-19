@@ -93,7 +93,7 @@ cd "$(git rev-parse --show-toplevel)"
 
 Pass these after the bundle identifier in `simctl launch`:
 
-- No arguments: open the directly rendered `Paypalweb` page tab.
+- No arguments: open the directly rendered `Paypalweb` balance page tab.
 - `--balance` or legacy `--iframe`: open the balance iframe tab.
 - `--send-money`: open the send-money iframe tab.
 - `--multilevel`: open the Samsungweb → Paypalweb → Checkoutweb nested iframe tab.
@@ -126,7 +126,7 @@ https://checkoutweb.localhost:8443  -> server/web/c
 Important pages:
 
 ```text
-Paypalweb direct:        /direct.html
+Paypalweb direct balance: /direct.html
 Balance iframe root:     /iframe.html
 Send Money iframe root:  /send-money-iframe.html
 Paypalweb balance:       /balance.html

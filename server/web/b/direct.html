@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Direct PayPal Page</title>
+  <title>Direct PayPal Balance</title>
   <style>
     :root { color-scheme: light; }
     * { box-sizing: border-box; }
@@ -39,19 +39,18 @@
       box-shadow: 0 12px 30px rgba(0, 48, 135, .08);
     }
     .explanation strong { display: block; margin-bottom: 5px; color: #003087; }
-    label { display: block; margin-bottom: 7px; color: #243b53; font-size: 13px; font-weight: 700; }
-    input {
-      width: 100%;
-      min-height: 48px;
-      padding: 11px 13px;
+    .balance-card {
+      padding: 20px;
       border: 2px solid #8ec8f0;
-      border-radius: 12px;
-      color: #102a43;
+      border-radius: 16px;
       background: #ffffff;
-      font: inherit;
-      outline: none;
+      box-shadow: 0 12px 30px rgba(0, 48, 135, .08);
     }
-    input:focus { border-color: #0070ba; box-shadow: 0 0 0 4px rgba(0, 112, 186, .12); }
+    .balance-card h2 { margin: 0; color: #142c8e; font-size: 21px; }
+    .account { margin: 5px 0 18px; color: #64748b; font-size: 14px; }
+    .amount { margin: 0; color: #0f172a; font-size: 42px; font-weight: 800; letter-spacing: -.04em; }
+    .available { margin: 6px 0 0; color: #475569; font-size: 17px; }
+    .available strong { color: #047857; }
     .option-note {
       margin: 28px 0 0;
       padding: 15px 18px;
@@ -66,20 +65,24 @@
   </style>
 </head>
 <body data-page-owner="paypalweb-direct">
-  <span class="brand"><span class="dot"></span>PAYPAL · DIRECT PAGE</span>
-  <h1>This is a PayPal page</h1>
-  <p class="lead">This PayPal page is rendered directly in the iOS WebView.</p>
+  <span class="brand"><span class="dot"></span>PAYPAL · DIRECT BALANCE</span>
+  <h1>This is a PayPal balance page</h1>
+  <p class="lead">This PayPal balance page is rendered directly in the iOS WebView.</p>
 
   <div class="explanation">
     <strong>No iframe is used</strong>
     Native inspection reads this PayPal page as the main frame.
   </div>
 
-  <label for="direct-value">Demo page value</label>
-  <input id="direct-value" name="directValue" value="Direct value from the PayPal page" autocomplete="off">
+  <section class="balance-card" aria-label="PayPal balance">
+    <h2>Available balance</h2>
+    <p class="account">Personal account ···· 4821</p>
+    <p class="amount" id="current-balance">$12,480.50</p>
+    <p class="available">Available now: <strong id="available-balance">$12,350.50</strong></p>
+  </section>
 
   <p class="option-note">This is option 3</p>
 
-  <span data-native-summary>PayPal page · Rendered directly · No iframe · This is option 3</span>
+  <span data-native-summary>PayPal balance page · Rendered directly · Balance $12,480.50 · Available $12,350.50 · No iframe · This is option 3</span>
 </body>
 </html>
